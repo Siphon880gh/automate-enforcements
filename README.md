@@ -15,8 +15,9 @@
 
 ## Details
 
-See my notes on best practices and standards here:
-https://codernotes.wengindustries.com/?open=_Software%20Development%20Standards%20-%20Team%20Formatting%20and%20Linting%20Standards
+I've built my tools based on best practices and standards here:
+- Formating and Linting: https://codernotes.wengindustries.com/?open=_Software%20Development%20Standards%20-%20Team%20Formatting%20and%20Linting%20Standards
+- Git: https://codernotes.wengindustries.com/?open=_Software%20Development%20Standards%20-%20Team%20Git%20Commit%20Naming,%20Branching,%20Merging,%20Pruning,%20Naming
 
 The tool asks the developer lead questions about the standards they want for the team:
 
