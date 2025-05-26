@@ -6,7 +6,7 @@ const questions = [
     {
         name: 'useConventionalCommits',
         message: `
-\n1. Do you want to enforce Conventional Commit message format?
+\n1. (Git) Do you want to enforce Conventional Commit message format?
 
 Format must be: (?i)^(feat|fix|docs|style|refactor|test|chore)(\([a-z0-9\-]+\))?
 Example: feat: add login button
@@ -18,22 +18,180 @@ Example: feat(auth): add login button
     {
         name: 'enforceBranchNaming',
         message: `
-\n2. Do you want to enforce branch naming convention
+\n2. (Git) Do you want to enforce branch naming convention
 
 Format must be: YYYY.MM.DD-description-with-hyphens
 Example: 2025.05.22-Weng-Dockerfile
 `,
         type: 'confirm',
         default: true
+    },
+    {
+        name: 'useCustomVSCodeFormatting',
+        message: '\n3. (VSCode) Do you want to change VS Code default formatting settings?',
+        type: 'confirm',
+        default: true
+    },
+    {
+        name: 'usePrettier',
+        message: '\n4. (Prettier) Do you want to use Prettier for code formatting?',
+        type: 'confirm',
+        default: true
+    },
+    {
+        name: 'useESLint',
+        message: '\n5. (ESLint) Do you want to use ESLint for code linting?',
+        type: 'confirm',
+        default: true
+    },
+    {
+        name: 'indentationType',
+        message: '\n6. (VS Code, Prettier) What type of indentation do you prefer?',
+        type: 'list',
+        choices: ['Spaces', 'Tabs'],
+        default: 'Spaces',
+        when: (answers) => answers.useCustomVSCodeFormatting
+    },
+    {
+        name: 'tabSize',
+        message: '\n7. (VS Code, Prettier) How many spaces/tabs for indentation?',
+        type: 'number',
+        default: 2,
+        when: (answers) => answers.useCustomVSCodeFormatting
+    },
+    {
+        name: 'endOfLine',
+        message: '\n8. (VS Code, Prettier) What line ending do you prefer?\n',
+        type: 'list',
+        choices: [
+          { name: 'LF (\\n) - Unix/macOS - Recommended for cross-platform projects', value: 'lf' },
+          { name: 'CRLF (\\r\\n) - Windows - May be required for some Windows tools', value: 'crlf' },
+          { name: 'CR (\\r) - Legacy Macs (rarely used)', value: 'cr' },
+          { name: 'Auto - Let Prettier detect and preserve existing endings', value: 'auto' }
+        ],
+        default: 'lf',
+        when: (answers) => answers.usePrettier || answers.useESLint
+    },      
+    {
+        name: 'trimTrailingWhitespace',
+        message: '\n9. (VS Code, Prettier always) Do you want to trim trailing whitespace?',
+        type: 'confirm',
+        default: true,
+        // prettier will always trim trailing whitespace and takes precedance over VS Code settings.json
+        when: (answers) => !answers.usePrettier
+    },
+    {
+        name: 'insertFinalNewline',
+        message: '\n10. (VS Code) Do you want to insert final newline at the end of files?',
+        type: 'confirm',
+        default: true,
+        when: (answers) => answers.usePrettier || answers.useESLint
     }
 ];
 
 inquirer.prompt(questions).then((answers) => {
     const hooksDir = path.join('generated','.git', 'hooks');
+    const vscodeDir = path.join('generated', '.vscode');
     
-    // Create .git/hooks directory if it doesn't exist
+    // Create directories if they don't exist
     if (!fs.existsSync(hooksDir)) {
         fs.mkdirSync(hooksDir, { recursive: true });
+    }
+    if (!fs.existsSync(vscodeDir)) {
+        fs.mkdirSync(vscodeDir, { recursive: true });
+    }
+
+    // Create VS Code extensions.json
+    if (answers.usePrettier || answers.useESLint) {
+        const extensions = {
+            recommendations: []
+        };
+        
+        if (answers.usePrettier) {
+            extensions.recommendations.push('esbenp.prettier-vscode');
+        }
+        if (answers.useESLint) {
+            extensions.recommendations.push('dbaeumer.vscode-eslint');
+        }
+        
+        fs.writeFileSync(
+            path.join(vscodeDir, 'extensions.json'),
+            JSON.stringify(extensions, null, 2)
+        );
+        console.log('✅ Created VS Code extensions.json');
+    }
+
+    // Create VS Code settings.json
+    if (answers.usePrettier || answers.useESLint) {
+        let settings = {
+            'editor.formatOnSave': true,
+            'editor.tabWidth': answers.tabSize,
+            'editor.insertSpaces': answers?.indentationType === 'Spaces',
+            'files.insertFinalNewline': answers.insertFinalNewline
+        };
+
+        if("trimTrailingWhitespace" in answers) {
+            settings['files.trimTrailingWhitespace'] = answers.trimTrailingWhitespace;
+        }
+
+        if (answers.usePrettier) {
+            settings['editor.defaultFormatter'] = 'esbenp.prettier-vscode';
+        }
+
+        fs.writeFileSync(
+            path.join(vscodeDir, 'settings.json'),
+            JSON.stringify(settings, null, 2)
+        );
+        console.log('✅ Created VS Code settings.json');
+    }
+
+    // Create .prettierrc
+    if (answers.usePrettier) {
+        const prettierConfig = {
+            tabWidth: answers.tabSize,
+            useTabs: answers?.indentationType === 'Tabs',
+            endOfLine: answers.endOfLine,
+            trailingComma: 'es5',
+            semi: true,
+            singleQuote: true,
+            printWidth: 80,
+        };
+
+        fs.writeFileSync(
+            path.join('generated', '.prettierrc'),
+            JSON.stringify(prettierConfig, null, 2)
+        );
+        console.log('✅ Created .prettierrc');
+    }
+
+    // Create .eslintrc
+    if (answers.useESLint) {
+        const eslintConfig = {
+            env: {
+                browser: true,
+                es2021: true,
+                node: true
+            },
+            extends: [
+                'eslint:recommended'
+            ],
+            parserOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module'
+            },
+            rules: {
+                'indent': ['error', answers?.indentationType === 'Spaces' ? answers.tabSize : 'tab'],
+                'linebreak-style': ['error', answers.endOfLine],
+                'quotes': ['error', 'single'],
+                'semi': ['error', 'always']
+            }
+        };
+
+        fs.writeFileSync(
+            path.join('generated', '.eslintrc'),
+            JSON.stringify(eslintConfig, null, 2)
+        );
+        console.log('✅ Created .eslintrc');
     }
 
     if (answers.useConventionalCommits) {
@@ -78,5 +236,5 @@ fi`;
         console.log('✅ Created pre-push hook');
     }
 
-    console.log('\n✨ Enforcement hooks/scripts have been generated successfully!\n✨ Please open `generated/` folder and copy the files where you want to enforce the rules.');
+    console.log('\n✨ All configurations have been generated successfully!\n✨ Please open `generated/` folder and copy the files where you want to enforce the rules.');
 });

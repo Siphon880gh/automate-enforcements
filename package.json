@@ -8,5 +8,8 @@
   },
   "dependencies": {
     "inquirer": "^8.2.6"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
   }
 }
