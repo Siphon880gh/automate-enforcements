@@ -1,0 +1,13 @@
+.DS_Store
+thumbs.db
+desktop.ini
+.vscode
+node_modules/
+package-lock.json
+out/
+dist/
+build/
+.sass-cache/
+*.css.map
+*.env
+logs/
