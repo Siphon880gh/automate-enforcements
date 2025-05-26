@@ -34,7 +34,7 @@ Testing that the rules are enforced:
 ![](Docs/3-enforced-git-1.png)
 
 - Let's push a branch to origin that violates naming standards:
-![](Docs/3-enforced-git-2.png)
+![](Docs/4-enforced-git-2.png)
 
 ## Features
 
