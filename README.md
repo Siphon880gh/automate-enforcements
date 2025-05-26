@@ -15,7 +15,7 @@
 
 ## Details
 
-I've built my tools based on best practices and standards here:
+I've built my tool based on best practices and standards here:
 - Formating and Linting: https://codernotes.wengindustries.com/?open=_Software%20Development%20Standards%20-%20Team%20Formatting%20and%20Linting%20Standards
 - Git: https://codernotes.wengindustries.com/?open=_Software%20Development%20Standards%20-%20Team%20Git%20Commit%20Naming,%20Branching,%20Merging,%20Pruning,%20Naming
 
