@@ -22,7 +22,7 @@ The tool asks the developer lead questions about the standards they want for the
 
 ![](Docs/1-questions.png)
 
-Generates config files
+Generates the config files:
 
 ![](Docs/2-generated-configs.png)
 
