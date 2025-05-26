@@ -1,15 +1,21 @@
-# Team Standards CLI
-
-![Last Commit](https://img.shields.io/github/last-commit/Siphon880gh/automate-enforcements/main)
+<h1 align="center">🤖 Automate Enforcements</h1>
+<hr/?
+<div align="center">
+<a href="https://github.com/Siphon880gh/automate-enforcements/commits/main" target="_blank" rel="noopener">
+  <img src="https://img.shields.io/github/last-commit/Siphon880gh/automate-enforcements/main" alt="Last Commit"/>
+</a>
 <a target="_blank" href="https://github.com/Siphon880gh" rel="nofollow"><img src="https://img.shields.io/badge/GitHub--blue?style=social&logo=GitHub" alt="Github" data-canonical-src="https://img.shields.io/badge/GitHub--blue?style=social&logo=GitHub" style="max-width:8.5ch;"></a>
 <a target="_blank" href="https://www.linkedin.com/in/weng-fung/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin&labelColor=blue" alt="Linked-In" data-canonical-src="https://img.shields.io/badge/LinkedIn-blue?style=flat&amp;logo=linkedin&amp;labelColor=blue" style="max-width:10ch;"></a>
 <a target="_blank" href="https://www.youtube.com/@WayneTeachesCode/" rel="nofollow"><img src="https://img.shields.io/badge/Youtube-red?style=flat&logo=youtube&labelColor=red" alt="Youtube" data-canonical-src="https://img.shields.io/badge/Youtube-red?style=flat&amp;logo=youtube&amp;labelColor=red" style="max-width:10ch;"></a>
+</div>
 
-By Weng Fei Fung.
 
-A command-line tool that automatically generates and configures setting files and Git hooks to help teams establish and enforce consistent coding standards, Git practices, and development workflows. 
-
-The tool creates configuration files for VS Code, Prettier, ESLint, and Git hooks for commit messages and branch naming conventions.
+> By Weng Fei Fung.
+>
+>A command-line tool that automatically generates and configures setting files and Git hooks to help teams establish and enforce consistent coding standards, Git practices, and development workflows. 
+>
+>The tool creates configuration files for VS Code, Prettier, ESLint, and Git hooks for commit messages and branch naming conventions.
+>
 
 ## Features
 
