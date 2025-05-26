@@ -2,6 +2,15 @@ const inquirer = require('inquirer');
 const fs = require('fs');
 const path = require('path');
 
+// Function to clear generated directory
+function clearGeneratedDirectory() {
+    const generatedDir = path.join('generated');
+    if (fs.existsSync(generatedDir)) {
+        fs.rmSync(generatedDir, { recursive: true, force: true });
+    }
+    fs.mkdirSync(generatedDir);
+}
+
 const questions = [
     {
         name: 'useConventionalCommits',
@@ -90,6 +99,9 @@ Example: 2025.05.22-Weng-Dockerfile
 ];
 
 inquirer.prompt(questions).then((answers) => {
+    // Clear and recreate generated directory
+    clearGeneratedDirectory();
+    
     const hooksDir = path.join('generated','.git', 'hooks');
     const vscodeDir = path.join('generated', '.vscode');
     
