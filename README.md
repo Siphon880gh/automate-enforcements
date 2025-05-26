@@ -10,9 +10,7 @@
 
 > By Weng Fei Fung.
 >
->A command-line tool that automatically generates and configures setting files and Git hooks to help teams establish and enforce consistent coding standards, Git practices, and development workflows. 
->
->The tool creates configuration files for VS Code, Prettier, ESLint, and Git hooks for commit messages and branch naming conventions.
+>A command-line tool creates configuration files for VS Code, Prettier, ESLint, and Git hooks to help teams establish and enforce consistent coding standards and Git practices.
 >
 
 ## Features
