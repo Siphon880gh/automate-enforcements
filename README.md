@@ -13,6 +13,29 @@
 >A command-line tool creates configuration files for VS Code, Prettier, ESLint, and Git hooks to help teams establish and enforce consistent coding standards and Git practices.
 >
 
+## Details
+
+See my notes on best practices and standards here:
+https://codernotes.wengindustries.com/?open=_Software%20Development%20Standards%20-%20Team%20Formatting%20and%20Linting%20Standards
+
+The tool asks the developer lead questions about the standards they want for the team:
+
+![](Docs/1-questions.png)
+
+Generates config files
+
+![](Docs/2-generated-configs.png)
+
+The developer reveals then finalizes the config files by coping them over relative to the app root. 
+
+Testing that the rules are enforced:
+
+- Let's make a git commit violating naming standards:
+![](Docs/3-enforced-git-1.png)
+
+- Let's push a branch to origin that violates naming standards:
+![](Docs/3-enforced-git-2.png)
+
 ## Features
 
 ### Git Standards
@@ -40,6 +63,7 @@
 ### VS Code Integration
 - Automatic VS Code settings configuration
 - Recommended extensions for Prettier and ESLint
+- Cover settings that Prettier and ESLint lack
 - Consistent editor settings across team members
 
 ## Installation
