@@ -1,6 +1,9 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const path = require('path');
+const { prettierIgnoreContentTemplate } = require('./templates/prettyignore.js');
+const { commitMsgHookTemplate } = require('./templates/commitMessageHook.js');
+const { prePushHookTemplate } = require('./templates/prePushHook.js');
 
 // Function to clear generated directory
 function clearGeneratedDirectory() {
@@ -176,50 +179,7 @@ inquirer.prompt(questions).then((answers) => {
         console.log('✅ Created .prettierrc');
 
         // Create .prettierignore
-        const prettierIgnoreContent = `# Dependencies
-node_modules/
-.pnp/
-.pnp.js
-
-# Build outputs
-dist/
-build/
-out/
-.next/
-
-# Cache
-.cache/
-.npm/
-.eslintcache
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Generated files
-generated/
-coverage/
-`;
+        const prettierIgnoreContent = prettierIgnoreContentTemplate;
 
         fs.writeFileSync(
             path.join('generated', '.prettierignore'),
@@ -259,23 +219,7 @@ coverage/
     }
 
     if (answers.useConventionalCommits) {
-        const commitMsgHook = `#!/bin/sh
-
-# Regex for Conventional Commit (e.g., feat: message, fix: message)
-commit_regex="(?i)^(feat|fix|docs|style|refactor|test|chore)(\\([a-z0-9\\-]+\\))?: .+"
-
-commit_msg=$(cat "$1")
-
-if ! echo "$commit_msg" | grep -Eq "$commit_regex"; then
-  echo "⛔️ Commit message must follow Conventional Commits format:"
-  echo "'''"
-  echo "(?i)^(feat|fix|docs|style|refactor|test|chore)(\([a-z0-9\-]+\))?: .+"
-  echo "'''"
-  echo ""
-  echo "Example: feat: add login button"
-  echo "Example: feat(auth): add login button"
-  exit 1
-fi`;
+        const commitMsgHook = commitMsgHookTemplate;
 
         fs.writeFileSync(path.join(hooksDir, 'commit-msg'), commitMsgHook);
         fs.chmodSync(path.join(hooksDir, 'commit-msg'), '755');
@@ -283,17 +227,7 @@ fi`;
     }
 
     if (answers.enforceBranchNaming) {
-        const prePushHook = `#!/bin/sh
-branch_name=$(git symbolic-ref --short HEAD)
-pattern='^[0-9]{4}\\.[0-9]{2}\\.[0-9]{2}-[A-Za-z0-9\\-]+$'
-
-if ! echo "$branch_name" | grep -Eq "$pattern"; then
-  echo "⛔️ Branch name '$branch_name' is invalid."
-  echo "Format must be: YYYY.MM.DD-description-with-hyphens"
-  echo ""
-  echo "Example: 2025.05.22-Weng-Dockerfile"
-  exit 1
-fi`;
+        const prePushHook = prePushHookTemplate;
 
         fs.writeFileSync(path.join(hooksDir, 'pre-push'), prePushHook);
         fs.chmodSync(path.join(hooksDir, 'pre-push'), '755');
