@@ -1,11 +1,12 @@
 {
-  "name": "git",
+  "name": "automate-enforcements",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Setup Git hooks for commit message and branch naming conventions",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "dependencies": {
+    "inquirer": "^8.2.6"
+  }
 }
